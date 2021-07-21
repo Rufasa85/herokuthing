@@ -1,22 +1,11 @@
 const express = require("express");
 const path = require("path");
-// Sets up the Express App
-// =============================================================
+
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
-const donuts = [
-    {
-        type:"Maple Bar",
-        rating:10,
-        price:3.99
-    },
-    {
-        type:"Apple Fritter",
-        rating:9,
-        price:5.99
-    }
-]
+
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -25,13 +14,12 @@ app.use(express.json());
 // Static directory
 app.use(express.static("public"));
 
-app.get("/",(req,res)=>{
-    res.sendFile(path.join(__dirname,"./public/index.html"))
-})
+const htmlRoutes = require("./controllers/htmlController");
+app.use(htmlRoutes)
 
-app.get("/api/donuts",(req,res)=>{
-    res.json(donuts)
-})
+const donutRoutes = require("./controllers/donutController");
+app.use("/api/donuts",donutRoutes)
+
 
 app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
